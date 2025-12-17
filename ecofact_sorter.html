@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Ecofact Sorter (AIES)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f9f7f4; /* Light sandy background */
+            /* Subtle grid background pattern for texture */
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZlcnNpb25QcmVzZW50YXRpb249InByZXNlbnRhdGlvbiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMCA0IDY0IDQgNjQgOCAwIDhaIiBmaWxsPSIjNzQ2NDVhIiBzdG9wLWNvbG9yPSIjNjQ2NDY0Ii8+CiAgPHBhdGggZD0iTTAgMTIgNjQgMTIgNjQgMTYgMCAxNloiIGZpbGw9IiM3NDY0NWEiIHN0b3AtY29sb3I9IiM2NDY0NjQiLz4KICA8cGF0aCBkPSJNMCAyMCA2NCAyMCA2NCAyNCAwIDI0WiIgZmlsbD0iIzc0NjQ1YSIgc3RvcC1jb2xvcj0iIzY0NjQ2NCIvPgogIDxwYXRoIGQ9Ik0wIDI4IDMyIDI4IDMyIDMyIDAgMzJaIiBvcGFjaXR5PSIuMyIgZmlsbD0iI2EyOWY3MCIvPgogIDxwYXRo Gek0wIDM2IDMyIDM2IDMyIDQwIDAgNDBaIiBvcGFjaXR5PSIuMyIgZmlsbD0iI2EyOWY3MCIvPgogIDxwYXRo Gek0wIDQ0IDMyIDQ0IDMyIDQ4IDAgNDhaIiBvcGFjaXR5PSIuMyIgZmlsbD0iI2EyOWY3MCIvPgogIDxwYXRo Gek0wIDUyIDMyIDUyIDMyIDU2IDAgNTZaIiBvcGFjaXR5PSIuMyIgZmlsbD0iI2EyOWY3MCIvPgogIDxwYXRo Gek0wIDYwIDMyIDYwIDMyIDY0IDAgNjRaIiBvcGFjaXR5PSIuMyIgZmlsbD0iI2EyOWY3MCIvPgogIDxwYXRo Gek00OCAzMiA2NCAzMiA2NCAzNiA0OCAzNloiIG9wYWNpdHk9Ii4zIiBmaWxsPSIjYjJhNmEzIi8+CiAgPHBhdG Gek00OCAzNiA2NCAzNiA2NCA0MCA0OCAzNlptMC04IDE2IDAgMTYgNCA0OCAyOFoiIG9wYWNpdHk9Ii4zIiBmaWxsPSIjYjJhNmEzIi8+CiAgPHBhdGggZD0iTTMyIDAgMzYgMCAzNiAzMiAzMiAzMloiIG9wYWNpdHk9Ii4xIiBmaWxsPSIjYjJhNmEzIi8+CiAgPHBhdGggZD0iTTQ0IDAgNDggMCA0OCA2NCA0NCA2NFoiIG9wYWNpdHk9Ii4xIiBmaWxsPSIjYjJhNmEzIi8+CiAgPHBhdGggZD0iTTU2IDAgNjAgMCA2MCA2NCA1NiA2NFoiIG9wYWNpdHk9Ii4xIiBmaWxsPSIjYjJhNmEzIi8+CiAgPHBhdG Gek0wIDMyIDMyIDMyIDMyIDM2IDAgMzZaIiBvcGFsYWNpdHk9Ii4zIiBmaWxsPSIjYTI5ZjcwIi8+CiAgPHBhdG Gek0wIDY0IDY0IDY0IDY0IDY4IDAgNjh6IiBmaWxsPSIjNzQ2NDVhIi8+Cjwvc3ZnPg==');
+            background-size: 200px 200px;
+            background-blend-mode: multiply;
+        }
+        h1, h2, h3 {
+            font-family: 'Merriweather', serif;
+        }
+        /* Custom styles for mobile-like appearance */
+        .app-container {
+            max-width: 480px; /* Standard mobile width limit */
+            min-height: 100vh;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background-color: #ffffff; /* White card background */
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .shimmer {
+            background: linear-gradient(to right, #e0e0e0 0%, #f0f0f0 20%, #e0e0e0 40%);
+            background-size: 1000px 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: -500px 0; }
+            100% { background-position: 500px 0; }
+        }
+    </style>
+</head>
+<body class="flex justify-center p-0 sm:p-4">
+
+    <div id="app" class="app-container w-full mx-auto flex flex-col items-center">
+        <!-- Header: Desert Theme -->
+        <header class="w-full p-6 bg-amber-700 shadow-xl rounded-b-xl relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-800 to-yellow-600 opacity-80"></div>
+            <div class="relative z-10">
+                <h1 class="text-2xl font-bold text-white text-center tracking-wide drop-shadow-md">
+                    AI-Powered Ecofact Sorter (AIES)
+                </h1>
+                <p class="text-sm text-amber-200 text-center mt-2 font-semibold">
+                    Ancient Crop Identification
+                </p>
+            </div>
+            
+            <!-- Sun Icon (SVG) -->
+            <svg class="absolute top-4 right-4 w-12 h-12 text-yellow-300 opacity-75" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 2a8 8 0 100 16 8 8 0 000-16zM11 0h2v4h-2zm0 20h2v4h-2zm1-13.828l1.414-1.414 1.414 1.414-1.414 1.414zm-4.242 0l-1.414-1.414-1.414 1.414 1.414 1.414zm8.484 0l1.414-1.414 1.414 1.414-1.414 1.414zm-4.242 8.484l1.414-1.414 1.414 1.414-1.414 1.414z"/>
+            </svg>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="w-full p-6 space-y-6 flex-grow">
+
+            <!-- Image Upload Section -->
+            <div class="bg-amber-50 p-4 rounded-xl border border-dashed border-amber-300 shadow-inner text-center">
+                <input type="file" id="cameraInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                <button id="uploadButton" onclick="document.getElementById('cameraInput').click()" 
+                        class="w-full p-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg transition duration-150 ease-in-out shadow-lg shadow-amber-300/50 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.868-1.298A2 2 0 0111.12 4h1.76a2 2 0 011.664.89l.868 1.298A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Capture or Select Image
+                </button>
+                <p id="fileName" class="text-sm text-gray-600 mt-2 hidden">No file selected.</p>
+            </div>
+
+            <!-- Image Preview and Analysis Card -->
+            <div id="analysisCard" class="hidden bg-white p-4 rounded-xl shadow-lg border border-gray-100 space-y-4">
+                <h2 class="text-xl font-bold text-amber-800 border-b pb-2">Oasis of Insight</h2>
+
+                <!-- Image Preview -->
+                <div class="relative w-full h-48 bg-gray-200 rounded-lg overflow-hidden border-2 border-amber-200">
+                    <img id="imagePreview" class="w-full h-full object-cover" alt="Image to analyze">
+                </div>
+
+                <!-- AI Output Area (Primary Text) -->
+                <div id="resultOutput" class="space-y-3">
+                    <div class="text-gray-700 text-sm">
+                        <p id="resultText" class="leading-relaxed"></p>
+                    </div>
+                    
+                    <!-- Grounding/Citation Area -->
+                    <div id="citationArea" class="text-xs text-gray-500 pt-2 border-t border-amber-100 mt-3 hidden">
+                        <span class="font-semibold text-gray-600">Whispers from the Ancients:</span>
+                        <ul id="sourcesList" class="list-disc list-inside space-y-1 mt-1"></ul>
+                    </div>
+                </div>
+
+                <!-- Loading State Shimmer -->
+                <div id="loadingIndicator" class="hidden space-y-3">
+                    <div class="shimmer h-5 w-3/4 bg-gray-300"></div>
+                    <div class="shimmer h-3 w-full bg-gray-300"></div>
+                    <div class="shimmer h-3 w-11/12 bg-gray-300"></div>
+                    <div class="shimmer h-3 w-4/5 bg-gray-300"></div>
+                    <div class="shimmer h-3 w-5/6 bg-gray-300"></div>
+                </div>
+                
+                <!-- Error Message -->
+                <div id="errorBox" class="hidden bg-red-100 text-red-700 p-3 rounded-lg text-sm"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // --- API KEY CONFIGURATION ---
+        // NOTE: This key is automatically provided in the Canvas environment. 
+        // If running locally in your browser, REPLACE THE EMPTY STRING BELOW with your actual Google Gemini API Key.
+        // Get your key from: https://ai.google.dev/
+        const API_KEY = "AIzaSyDdNJePKQIvdM4Oo0bDMuImWDKbA04eadg"; // <-- PASTE YOUR KEY HERE FOR LOCAL TESTING
+        // -----------------------------
+
+        const FLASH_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+        
+        // UI Element References
+        const imagePreview = document.getElementById('imagePreview');
+        const analysisCard = document.getElementById('analysisCard');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const resultText = document.getElementById('resultText');
+        const errorBox = document.getElementById('errorBox');
+        const sourcesList = document.getElementById('sourcesList');
+        const citationArea = document.getElementById('citationArea');
+        const fileNameElement = document.getElementById('fileName');
+
+        let base64ImageData = '';
+        let currentAnalysisText = ''; 
+        let currentMimeType = ''; 
+
+        /**
+         * Utility function to convert a File object to a Base64 string.
+         * @param {File} file The file to convert.
+         * @returns {Promise<string>} A promise that resolves with the Base64 data string.
+         */
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                // We only need the base64 data part after the comma
+                reader.onload = () => resolve(reader.result.split(',')[1]); 
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        /**
+         * Clears all output fields and shows the loading state.
+         */
+        function setLoadingState() {
+            analysisCard.classList.remove('hidden');
+            loadingIndicator.classList.remove('hidden');
+            resultText.textContent = '';
+            errorBox.classList.add('hidden');
+            errorBox.textContent = '';
+            citationArea.classList.add('hidden');
+            sourcesList.innerHTML = '';
+            currentAnalysisText = '';
+        }
+
+        /**
+         * Hides the loading state.
+         */
+        function hideLoadingState() {
+            loadingIndicator.classList.add('hidden');
+        }
+
+        /**
+         * Generic fetch wrapper with exponential backoff for API calls.
+         * @param {string} url The API endpoint URL.
+         * @param {Object} options Fetch options (method, headers, body).
+         * @returns {Promise<Object>} The JSON response.
+         */
+        async function fetchWithBackoff(url, options) {
+            const maxRetries = 5;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+
+                    if (!response.ok) {
+                        if (response.status === 403 || response.status === 400 && API_KEY === "") {
+                            // Check specifically for key errors when running locally
+                            throw new Error("API Key Missing or Invalid. Please ensure you have pasted your Gemini API key into the 'API_KEY' variable in the JavaScript section.");
+                        }
+                        if (response.status === 429 && i < maxRetries - 1) {
+                            // Exponential backoff
+                            const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            continue;
+                        }
+                        throw new Error(`API request failed with status ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    if (i === maxRetries - 1) {
+                        throw error;
+                    }
+                    if (error.message.includes("API Key Missing")) {
+                         // Stop retrying if it's a known key error
+                        throw error;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Handles the file upload event, converts the image to Base64, displays the preview, and triggers analysis.
+         */
+        async function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                fileNameElement.textContent = 'No file selected.';
+                fileNameElement.classList.remove('hidden');
+                analysisCard.classList.add('hidden');
+                return;
+            }
+
+            // Store the MIME type of the file
+            currentMimeType = file.type;
+
+            fileNameElement.textContent = file.name;
+            fileNameElement.classList.remove('hidden');
+            imagePreview.src = URL.createObjectURL(file);
+            
+            setLoadingState();
+            
+            try {
+                // 1. Convert file to base64
+                base64ImageData = await fileToBase64(file);
+                // 2. Start the analysis process
+                await analyzeImage();
+            } catch (error) {
+                hideLoadingState();
+                errorBox.classList.remove('hidden');
+                errorBox.textContent = `File upload error: Could not load image file. (${error.message})`;
+            }
+        }
+
+        /**
+         * Calls the Gemini API for primary image analysis.
+         */
+        async function analyzeImage() {
+            // Check for valid MIME type before sending
+            if (!currentMimeType || !currentMimeType.startsWith('image/')) {
+                hideLoadingState();
+                errorBox.classList.remove('hidden');
+                errorBox.textContent = 'Vision Error: Invalid image file type detected.';
+                return;
+            }
+
+            const userPrompt = "What is the primary subject in this image? Provide a concise, single-paragraph description of the subject and one interesting, related fact. If it is an animal, identify its species.";
+            const systemPrompt = "You are an expert Vision Analyst. Your goal is to identify and describe the object in the image based on its visual properties. Respond concisely and professionally.";
+
+            const payload = {
+                contents: [
+                    {
+                        role: "user",
+                        parts: [
+                            { text: userPrompt },
+                            {
+                                inlineData: {
+                                    // Use the dynamically detected MIME type
+                                    mimeType: currentMimeType, 
+                                    data: base64ImageData
+                                }
+                            }
+                        ]
+                    }
+                ],
+                // Enable Google Search for up-to-date, grounded information
+                tools: [{ "google_search": {} }], 
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            try {
+                const result = await fetchWithBackoff(FLASH_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                hideLoadingState();
+                displayPrimaryResult(result);
+
+            } catch (error) {
+                hideLoadingState();
+                errorBox.classList.remove('hidden');
+                
+                // Prioritize displaying the key error if detected
+                if (error.message.includes("API Key Missing or Invalid")) {
+                    errorBox.textContent = error.message;
+                } else {
+                    // General error message for other API failures
+                    errorBox.textContent = `Vision Error: Could not process image. This might be a temporary API issue or a problem with the image content. Please check the console for details.`;
+                }
+                
+                console.error("Analysis Error:", error);
+            }
+        }
+
+        /**
+         * Parses the primary analysis API response and updates the UI.
+         */
+        function displayPrimaryResult(result) {
+            const candidate = result.candidates?.[0];
+
+            if (candidate && candidate.content?.parts?.[0]?.text) {
+                currentAnalysisText = candidate.content.parts[0].text;
+                resultText.textContent = currentAnalysisText;
+                
+                // Extract and display grounding sources (citations)
+                let sources = [];
+                const groundingMetadata = candidate.groundingMetadata;
+                if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                    sources = groundingMetadata.groundingAttributions
+                        .map(attribution => ({
+                            uri: attribution.web?.uri,
+                            title: attribution.web?.title,
+                        }))
+                        .filter(source => source.uri && source.title);
+                }
+
+                sourcesList.innerHTML = '';
+                if (sources.length > 0) {
+                    sources.forEach(source => {
+                        const li = document.createElement('li');
+                        li.className = 'hover:text-amber-700 transition duration-100 ease-in-out';
+                        const a = document.createElement('a');
+                        a.href = source.uri;
+                        a.textContent = source.title;
+                        a.target = '_blank';
+                        li.appendChild(a);
+                        sourcesList.appendChild(li);
+                    });
+                    citationArea.classList.remove('hidden');
+                } else {
+                    citationArea.classList.add('hidden');
+                }
+
+            } else {
+                resultText.textContent = 'Primary analysis failed: Could not extract results from the AI.';
+            }
+        }
+
+        // Initialize the app on load to ensure elements exist
+        window.onload = () => {
+             console.log("AI-Powered Ecofact Sorter (AIES) App Initialized.");
+        };
+
+    </script>
+</body>
+</html>
